@@ -16,12 +16,14 @@ void cor(pixel **matriz, int dimX, int dimY){
             /*a 'formula' de um intervalo de random: a+(rand())%(b-a)
 			no nosso caso, a = 0 e b = 255 */
                 matriz[i][j].r = 0+(rand())%255;
-                matriz[i][j].g = 0+(rand())%255;;
-                matriz[i][j].b = 0+(rand())%255;;
+                matriz[i][j].g = 0+(rand())%255;
+                matriz[i][j].b = 0+(rand())%255;
             }
         }
 
 }
+int dimX, dimY;
+
 
 /////////////////////////////////////////////////////////////////
 int main(void){

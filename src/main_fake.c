@@ -1,32 +1,57 @@
 #include <stdio.h>
-#include "operacoes.h"
-#include "leitura_de_arquivo.h"
-#include "escrita_de_arquivo.h"
+#include <stdlib.h>
+
+#define DIMX         (500)
+#define DIMY         (400)
+
+void original( int x, int y, char color[] )
+{
+    color[0] = x + 2 * y % 256;  /* red */
+    color[1] = x - y % 256;      /* green */
+    color[2] = (x + y) % 256;    /* blue */
+}
 
 
+int main( int argc, char ** argv )
+{
+    int x = 0;
+    int y = 0;
+    FILE * fp = NULL;
+    char color[3] = { 0, 0, 0 }; /* r, g, b */
+    void (*getcolor)( int, int, char[] );
 
-int main() {
+    
+    getcolor = original;
 
-    Pixel imagem[3][2];
-    FILE *arquivo = fopen("teste.ppm", "w+");
-    fprintf(arquivo, "P3\n");
-    fprintf(arquivo, "3 2\n");
-    fprintf(arquivo, "255\n");
+    /* Abre arquivo para gravacao */
+    fp = fopen( argv[2], "wb" );
 
-    pintaPixel(&imagem[0][0], 255, 0,   0);
-    pintaPixel(&imagem[0][1], 0,   255, 0);
-    pintaPixel(&imagem[1][0], 0,   0,   0);
-    pintaPixel(&imagem[1][1], 255, 255, 0);
-    pintaPixel(&imagem[2][0], 255, 255, 255);
-    pintaPixel(&imagem[2][1], 0,   0,   0);
+    
 
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 2; j++){
-            fprintf(arquivo, "%i %i %i\n", imagem[i][j].r, imagem[i][j].g, imagem[i][j].b);
+    /*  Grava Cabeçalho (Header) no arquivo PPM  */
+    fprintf( fp, "P6\n" );
+    fprintf( fp, "%d %d\n", DIMX, DIMY );
+    fprintf( fp, "255\n" );
+
+    /* Gera imagem */
+
+    /* Para cada linha... */
+    for ( y = 0; y < DIMY; ++y )
+    {
+        /* Para cada coluna... */
+        for ( x = 0; x < DIMX; ++x )
+        {
+            /* calcula cor a partir da coordenadas */
+            getcolor( x, y, color );
+
+            /* Grava pixel RGB no arquivo */
+            fwrite( color, sizeof(char), sizeof(color), fp );
         }
     }
 
-    fclose(arquivo);
+    /* fecha arquivo */
+    fclose(fp);
 
-    return 0;
+    /* Sucesso */
+    return EXIT_SUCCESS;
 }
