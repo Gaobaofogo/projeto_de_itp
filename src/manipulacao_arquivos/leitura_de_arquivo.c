@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "operacoes.h"
+#include "../operacoes/operacoes.h"
 
 /*
  * leituraDeOperacoes: Varre o arquivo e devolve uma estrutura com todas as operações de escrita contidas

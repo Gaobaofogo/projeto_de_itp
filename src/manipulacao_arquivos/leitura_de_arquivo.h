@@ -1,7 +1,7 @@
 #ifndef LEITURA_DE_ARQUIVO_H
 #define LEITURA_DE_ARQUIVO_H
 
-#include "operacoes.h"
+#include "../operacoes/operacoes.h"
 #include <stdio.h>
 
 Operacoes leituraDeOperacoes(FILE *arquivo);
