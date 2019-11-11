@@ -1,29 +1,32 @@
 #include <stdio.h>
 #include "operacoes.h"
 #include "leitura_de_arquivo.h"
+#include "escrita_de_arquivo.h"
+
 
 
 int main() {
 
-    Operacoes operacoes;
-    int resultado = leituraDeArquivo("teste.txt", &operacoes);
+    Pixel imagem[3][2];
+    FILE *arquivo = fopen("teste.ppm", "w+");
+    fprintf(arquivo, "P3\n");
+    fprintf(arquivo, "3 2\n");
+    fprintf(arquivo, "255\n");
 
-    if(resultado == 1){
-        printf("Deu errado\n");
-    } else {
-        printf("Deu certo\n");
-    }
+    pintaPixel(&imagem[0][0], 255, 0,   0);
+    pintaPixel(&imagem[0][1], 0,   255, 0);
+    pintaPixel(&imagem[1][0], 0,   0,   0);
+    pintaPixel(&imagem[1][1], 255, 255, 0);
+    pintaPixel(&imagem[2][0], 255, 255, 255);
+    pintaPixel(&imagem[2][1], 0,   0,   0);
 
-    for(int i = 0; i < 11; i++){
-        printf("A operacao eh %s ", operacoes.operacoes[i].operacao);
-        printf("com parametros ");
-
-        for(int j = 0; j < operacoes.operacoes[i].qntdParametros; j++){
-            printf("%s ", operacoes.operacoes[i].parametros[j]);
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 2; j++){
+            fprintf(arquivo, "%i %i %i\n", imagem[i][j].r, imagem[i][j].g, imagem[i][j].b);
         }
-
-        printf("\n");
     }
+
+    fclose(arquivo);
 
     return 0;
 }
