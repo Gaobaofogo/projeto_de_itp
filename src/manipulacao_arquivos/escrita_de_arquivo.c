@@ -1,29 +1,51 @@
-/*
-Função que escreva em arquivo
-OUtra função que receba parâmetros e diga como vai ser aquele determinado pixel
-*/
+#include<stdio.h>
+#include<stdlib.h>
 
-#include "escrita_de_arquivo.h"
+typedef struct{
+	int r;
+	int g;
+	int b;
+} pixel;
 
+/*seria chamar no parametro uma matriz numa struct(?? kkk) com a
+a entrada tambem das duas dimensoes X e Y */
+void cor(pixel **matriz, int dimX, int dimY){
 
-Pixel criaPixel(int r, int g, int b){
-	Pixel pixel;
-
-	pixel.r = r;
-	pixel.g = g;
-	pixel.b = b;
-
-	return pixel;
+    for (int i = 0; i < dimX; i++){
+            for (int j = 0; j < dimY; j++){
+            /*a 'formula' de um intervalo de random: a+(rand())%(b-a)
+			no nosso caso, a = 0 e b = 255 */
+                matriz[i][j].r = 0+(rand())%255;
+                matriz[i][j].g = 0+(rand())%255;
+                matriz[i][j].b = 0+(rand())%255;
+            }
+        }
 }
 
-Pixel criaImagem(int largura, int altura){
-	Pixel imagem[largura][altura];
 
-	return // alguma coisa que referencia imagem;
-}
+void desenhaImagem(Operacoes operacoes){
+    int dimX, dimY;
+    pixel **image;
+    // Escrever na matriz de pixels o que deve ser feito
 
-void pintaPixel(Pixel *pixel, int r, int g, int b){
-	(*pixel).r = r;
-	(*pixel).g = g;
-	(*pixel).b = b;
+    if(operacao == "image") {
+        dimX = operacao.parametro[0];
+        dimY = operacao.parametro[1];
+    }
+
+    // Escrever de fato a imagem
+    arquivo = fopen("./checkpoint1.ppm", "w+");
+    fprintf(fp, "P3 \n");
+    fprintf(fp, "%d %d \n", dimX, dimY);
+    fprintf(fp, "255 \n");
+    
+    for (int i = 0; i < dimX; i++){
+        for (int j = 0; j < dimY; j++){
+            fprintf(fp, "%i ", image[i][j].r);
+            fprintf(fp, "%i ", image[i][j].g);
+            fprintf(fp, "%i \n", image[i][j].b);
+        }
+    }
+    
+    fclose(arquivo);
 }

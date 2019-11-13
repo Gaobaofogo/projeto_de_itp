@@ -4,7 +4,7 @@
 typedef struct{
 	int r;
 	int g;
-	int b;	
+	int b;
 } pixel;
 
 /*seria chamar no parametro uma matriz numa struct(?? kkk) com a
@@ -20,26 +20,25 @@ void cor(pixel **matriz, int dimX, int dimY){
                 matriz[i][j].b = 0+(rand())%255;
             }
         }
-
 }
-int dimX, dimY;
 
 
-/////////////////////////////////////////////////////////////////
-int main(void){
-	int dimX, dimY;
-	pixel **image;
+void desenhaImagem(Operacoes operacoes){
+    int dimX, dimY;
+    pixel **image;
+    // Escrever na matriz de pixels o que deve ser feito
 
-	void(image, dimX, dimY);
+    if(operacao == "image") {
+        dimX = operacao.parametro[0];
+        dimY = operacao.parametro[1];
+    }
 
-
-}
-FILE *arquivo;
-
+    // Escrever de fato a imagem
     arquivo = fopen("./checkpoint1.ppm", "w+");
     fprintf(fp, "P3 \n");
     fprintf(fp, "%d %d \n", dimX, dimY);
     fprintf(fp, "255 \n");
+    
     for (int i = 0; i < dimX; i++){
         for (int j = 0; j < dimY; j++){
             fprintf(fp, "%i ", image[i][j].r);
@@ -47,5 +46,6 @@ FILE *arquivo;
             fprintf(fp, "%i \n", image[i][j].b);
         }
     }
+    
     fclose(arquivo);
-   	return 0;
+}
