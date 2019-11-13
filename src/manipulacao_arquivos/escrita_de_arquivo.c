@@ -10,9 +10,10 @@ typedef struct{
 /*seria chamar no parametro uma matriz numa struct(?? kkk) com a
 a entrada tambem das duas dimensoes X e Y */
 void cor(pixel **matriz, int dimX, int dimY){
+    int i, j;
 
-    for (int i = 0; i < dimX; i++){
-            for (int j = 0; j < dimY; j++){
+    for (i = 0; i < dimX; i++){
+            for (j = 0; j < dimY; j++){
             /*a 'formula' de um intervalo de random: a+(rand())%(b-a)
             no nosso caso, a = 0 e b = 255 */
                 matriz[i][j].r = 0+(rand())%255;
@@ -24,8 +25,10 @@ void cor(pixel **matriz, int dimX, int dimY){
 
 /*Operacoes operacoes*/
 void desenhaImagem(){
-    int dimX, dimY, i, j;
+    int dimX, dimY;
+    int i, j;
     pixel **image;
+    FILE *arquivo;
 
     /*Escrever na matriz de pixels o que deve ser feito
 
@@ -35,16 +38,16 @@ void desenhaImagem(){
     }
 
     Escrever de fato a imagem*/
-    arquivo = fopen("./checkpoint1.ppm", "w+");
-    fprintf(fp, "P3 \n");
-    fprintf(fp, "%d %d \n", dimX, dimY);
-    fprintf(fp, "255 \n");
+    arquivo = fopen("./checkpoint1.ppm", "wb");
+    fprintf(arquivo, "P3 \n");
+    fprintf(arquivo, "%d %d \n", dimX, dimY);
+    fprintf(arquivo, "255 \n");
     
     for (i = 0; i < dimX; i++){
         for (j = 0; j < dimY; j++){
-            fprintf(fp, "%i ", image[i][j].r);
-            fprintf(fp, "%i ", image[i][j].g);
-            fprintf(fp, "%i \n", image[i][j].b);
+            fprintf(arquivo, "%i ", image[i][j].r);
+            fprintf(arquivo, "%i ", image[i][j].g);
+            fprintf(arquivo, "%i \n", image[i][j].b);
         }
     }
     
