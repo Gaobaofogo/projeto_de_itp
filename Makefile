@@ -15,16 +15,19 @@ remove_lixo:
 
 #### Funções auxiliares ####
 # Gera um executável do programa chamado 'prog'
-prog: src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o main.o
-	gcc -o prog src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o main.o -W -Wall -ansi -pedantic
+prog: src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o main.o
+	gcc -o prog src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o main.o -W -Wall -ansi -pedantic
 
 # Gera o arquivo '.o' de operacoes.c
 src/operacoes/operacoes.o: src/operacoes/operacoes.c
 	gcc src/operacoes/operacoes.c -o src/operacoes/operacoes.o -c -W -Wall -ansi -pedantic
 
 # Gera o arquivo '.o' de leitura_de_arquivo.c
-src/operacoes/leitura_de_arquivo.o: src/manipulacao_arquivos/leitura_de_arquivo.c
+src/manipulacao_arquivos/leitura_de_arquivo.o: src/manipulacao_arquivos/leitura_de_arquivo.c
 	gcc src/manipulacao_arquivos/leitura_de_arquivo.c -o src/manipulacao_arquivos/leitura_de_arquivo.o -c -W -Wall -ansi -pedantic
+
+src/manipulacao_arquivos/escrita_de_arquivo.o: src/manipulacao_arquivos/escrita_de_arquivo.c
+	gcc src/manipulacao_arquivos/escrita_de_arquivo.c -o src/manipulacao_arquivos/escrita_de_arquivo.o -c -W -Wall -ansi -pedantic
 
 # Gera o arquivo '.o' de main.c
 main.o: main.c

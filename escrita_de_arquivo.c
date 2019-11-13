@@ -22,24 +22,25 @@ void cor(pixel **matriz, int dimX, int dimY){
         }
 }
 
-
-void desenhaImagem(Operacoes operacoes){
-    int dimX, dimY;
+/*Operacoes operacoes*/
+void desenhaImagem(){
+    int dimX, dimY, i;
     pixel **image;
-    // Escrever na matriz de pixels o que deve ser feito
+
+    /*Escrever na matriz de pixels o que deve ser feito
 
     if(operacao == "image") {
         dimX = operacao.parametro[0];
         dimY = operacao.parametro[1];
     }
 
-    // Escrever de fato a imagem
+    Escrever de fato a imagem*/
     arquivo = fopen("./checkpoint1.ppm", "w+");
     fprintf(fp, "P3 \n");
     fprintf(fp, "%d %d \n", dimX, dimY);
     fprintf(fp, "255 \n");
     
-    for (int i = 0; i < dimX; i++){
+    for (i = 0; i < dimX; i++){
         for (int j = 0; j < dimY; j++){
             fprintf(fp, "%i ", image[i][j].r);
             fprintf(fp, "%i ", image[i][j].g);
