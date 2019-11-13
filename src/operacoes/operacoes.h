@@ -2,13 +2,13 @@
 #define OPERACOES_H
 
 typedef struct{
-    char operacao[10];
-    char parametros[7][10];
+    char *operacao;
+    char **parametros;
     int qntdParametros;
 } Operacao;
 
 typedef struct{
-    Operacao operacoes[15];
+    Operacao *operacoes;
     int qntdOperacoes;
 } Operacoes;
 

@@ -15,7 +15,7 @@ Operacoes leituraDeOperacoes(FILE *arquivo){
     int contadorOperacao = 0, primeiraOperacao = 1;
 
     while(fgets(textoArquivo, 50, arquivo) != NULL){
-        valores = strtok(textoArquivo, " \n");
+        valores = strtok(textoArquivo, " ");
 
         do{
             if(primeiraOperacao){

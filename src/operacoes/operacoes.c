@@ -1,6 +1,7 @@
 #include "operacoes.h"
 #include <string.h>
 
+
 /*
  * criaOperacoes: Cria um valor do tipo Operacoes com os valores dos parâmetros setados em 0
  * retorno: Operacoes
