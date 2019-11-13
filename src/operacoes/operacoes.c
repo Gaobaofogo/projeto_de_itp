@@ -6,10 +6,11 @@
  * retorno: Operacoes
  */
 Operacoes criaOperacoes() {
+    int i;
     Operacoes operacoes;
     operacoes.qntdOperacoes = 0;
 
-    for(int i = 0; i < 15; i++){
+    for(i = 0; i < 15; i++){
         operacoes.operacoes[i].qntdParametros = 0;        
     }
 

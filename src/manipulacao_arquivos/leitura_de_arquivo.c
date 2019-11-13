@@ -33,7 +33,6 @@ Operacoes leituraDeOperacoes(FILE *arquivo){
     }
 
     return operacoes;
-    // printf("%i", atoi(operacoes.operacoes[0].parametros[1]));
 }
 
 /*
@@ -59,4 +58,4 @@ int leituraDeArquivo(char nomeArquivo[], Operacoes *operacoes) {
     fclose(arquivo);
 
     return 0;
-};
+}
