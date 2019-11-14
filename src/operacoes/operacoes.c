@@ -1,4 +1,5 @@
 #include "operacoes.h"
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -11,12 +12,21 @@ Operacoes criaOperacoes() {
     Operacoes operacoes;
     operacoes.qntdOperacoes = 0;
 
-    for(i = 0; i < 15; i++){
-        operacoes.operacoes[i].qntdParametros = 0;        
-    }
-
     return operacoes;
 }
+
+/*
+typedef struct{
+    char *operacao;
+    char **parametros;
+    int qntdParametros;
+} Operacao;
+
+typedef struct{
+    Operacao *operacoes;
+    int qntdOperacoes;
+} Operacoes;
+*/
 
 /*
  * adicionaOperacao: Adiciona uma nova operacao na lista de operacoes
@@ -25,7 +35,15 @@ Operacoes criaOperacoes() {
  * retorno: Retorna por referência a estrutura de operações com uma nova operação adicionada
  */
 void adicionaOperacao(Operacoes *operacoes, char operacao[]){
+    
+    if((*operacoes).qntdOperacoes == 0){
+        (*operacoes).operacoes = malloc(1 * sizeof(Operacao));
+    } else {
+        (*operacoes).operacoes = realloc((*operacoes).operacoes, ((*operacoes).qntdOperacoes) * sizeof(Operacao));
+    }
+
     strcpy((*operacoes).operacoes[(*operacoes).qntdOperacoes].operacao, operacao);
+
     (*operacoes).qntdOperacoes++;
 }
 
