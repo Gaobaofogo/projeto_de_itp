@@ -2,7 +2,7 @@
 #define OPERACOES_H
 
 typedef struct{
-    char *operacao;
+    char operacao[8];
     char **parametros;
     int qntdParametros;
 } Operacao;
