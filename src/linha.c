@@ -56,7 +56,7 @@ void line(int xi,int yi,int xf,int yf) {
 	else {
 		swap = 0;
 	}
-	d = 2*(dy-dx);
+	d = 2*dy-dx;
 	for(i = 0; i <= dx; i++) {
 		/*função de pintar pixel, clear(?)*/
 		setPoint(x, y, '#');
@@ -76,6 +76,31 @@ void line(int xi,int yi,int xf,int yf) {
 			x = x+s1;
 		}
 		d = d+(2*dy);
+	}
+	setPoint(x, y, '#');
+}
+void line_b(int x1, int y1, int x2, int y2) {
+	int dx, dy, incrementoE, incrementeNE, d, x, y;
+
+	x = x1;
+	y = y1;
+	dx = x2 - x1;
+	dy = y2 - y1;
+	d = 2*dy - dx;
+	incrementoE = 2*dy;
+	incrementeNE = 2*(dy-dx);
+
+	setPoint(x, y, '#');
+	while(x < x1) {
+		if(d<=0) {
+			d = d + incrementoE;
+			x = x+1;
+		}
+		else {
+			d = d + incrementeNE;
+			x = x +1;
+			y = y + 1;
+		}
 	}
 	setPoint(x, y, '#');
 }
