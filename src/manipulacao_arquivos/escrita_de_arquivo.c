@@ -72,6 +72,7 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             
             void swapPixel(int dimX, int dimY, char caracter) {
                 int i, j; 
+                int imagem[i][j];
                 for ( ;i < dimX; ++i){
                     for (; j < dimY; ++j){
 
@@ -85,7 +86,7 @@ void desenhaImagem(char nome[], Operacoes operacoes){
                   }
             }
             int setPoint(int x, int y, char caracter) {
-                image[y][x] = caracter;
+                image[x][y] = caracter;
             }
             int sign(int num) {
                 int result;
@@ -170,29 +171,29 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             }
 
 
-    /* Escrita de arquivo */
-    FILE *arquivo;
-    arquivo = fopen(nome, "wb");
+        /* Escrita de arquivo */
+        FILE *arquivo;
+        arquivo = fopen(nome, "wb");
 
-    fprintf(arquivo, "P3 \n");
-    fprintf(arquivo, "%d %d \n", dimX, dimY);
-    fprintf(arquivo, "255 \n");
-    
-    for (i = 0; i < dimX; i++){
-        for (j = 0; j < dimY; j++){
-            fprintf(arquivo, "%i ", image[i][j].r);
-            fprintf(arquivo, "%i ", image[i][j].g);
-            fprintf(arquivo, "%i \n", image[i][j].b);
+        fprintf(arquivo, "P3 \n");
+        fprintf(arquivo, "%d %d \n", dimX, dimY);
+        fprintf(arquivo, "255 \n");
+        
+        for (i = 0; i < dimX; i++){
+            for (j = 0; j < dimY; j++){
+                fprintf(arquivo, "%i ", image[i][j].r);
+                fprintf(arquivo, "%i ", image[i][j].g);
+                fprintf(arquivo, "%i \n", image[i][j].b);
+            }
         }
-    }
-    
-    fclose(arquivo);
+        
+        fclose(arquivo);
 
-    /* Liberação de memória dos pixels */
-    for(i = 0; i < dimX; i++){
-        free(image[i]);
+        /* Liberação de memória dos pixels */
+        for(i = 0; i < dimX; i++){
+            free(image[i]);
+        }
+        free(image);
     }
-
-    free(image);
 }
 }
