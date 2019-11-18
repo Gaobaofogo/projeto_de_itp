@@ -10,6 +10,20 @@ typedef struct{
 } Pixel;
 
 /*
+ * defineCor: Pinta um pixel
+ * parametro *pixel: Ponteiro para um pixel
+ * parametro r: Valor r do formato RGB
+ * parametro g: Valor g do formato RGB
+ * parametro b: Valor b do formato RGB
+ * retorno: Devolve por referência o pixel pintado com a nova cor
+ */
+void defineCor(Pixel *cor, int r, int g, int b){
+    (*cor).r = r;
+    (*cor).g = g;
+    (*cor).b = b;
+}
+
+/*
  * clear: Preenche toda a imagem com uma cor especificada em rgb
  * parametro **image: Matriz de pixels que representa a imagem a ser gerada
  * parametro largura: largura da imagem
@@ -25,9 +39,9 @@ void clear(Pixel **image, int largura, int altura, int r, int b, int g){
     /* Seta todas os pixels com a cor rgb especificada */
     for(i = 0; i < largura; i++){
         for(j = 0; j < altura; j++){
-            imagem[i][j].r = r;
-            imagem[i][j].g = g;
-            imagem[i][j].b = b;
+            image[i][j].r = r;
+            image[i][j].g = g;
+            image[i][j].b = b;
         }
     }
 }
@@ -38,7 +52,7 @@ void swapPixel(int dimX, int dimY, int caracter1, int caracter2, int caracter3) 
     for ( ;i < dimX; ++i){
         for (; j < dimY; ++j){
 
-          if (imagem[i][j]==caracter){ 
+          if (imagem[i][j]==caracter1){ 
             printf("\u2588 ");
           } else {
             printf("%c ", imagem[i][j]);
@@ -47,11 +61,13 @@ void swapPixel(int dimX, int dimY, int caracter1, int caracter2, int caracter3) 
         printf("\n");
       }
 }
+
 int setPoint(int x, int y, int caracter1,int caracter2, int caracter3) {
-    imagem[x][y].r = caracter1;
+    /*imagem[x][y].r = caracter1;
     imagem[x][y].g = caracter2;
-    imagem[x][y].b = caracter3;
+    imagem[x][y].b = caracter3;*/
 }
+
 int sign(int num) {
     int result;
     if(num < 0) {
@@ -97,6 +113,9 @@ void desenhaImagem(char nome[], Operacoes operacoes){
     int dimX, dimY;
     int i, j, k, w;
     Pixel **image;
+    Pixel cor;
+    defineCor(&cor, 0, 0, 0);
+
 
     /* 
     Este bloco irá percorrer todas as operações lidas no arquivo e vai tomar
@@ -112,9 +131,9 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             dimX = atoi(operacoes.operacoes[k].parametros[0]);
             dimY = atoi(operacoes.operacoes[k].parametros[1]);
 
-            image = (Pixel **) malloc(dimX * sizeof(Pixel));
+            image = (Pixel **) malloc(dimX * sizeof(Pixel *));
 
-            for(j = 0; j < dimY; j++){
+            for(j = 0; j < dimX; j++){
                 image[j] = (Pixel *) malloc(dimY * sizeof(Pixel));
             }
         } else if(strcmp("clear", operacoes.operacoes[k].operacao) == 0){
@@ -122,13 +141,30 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             int r = atoi(operacoes.operacoes[k].parametros[0]);
             int g = atoi(operacoes.operacoes[k].parametros[1]);
             int b = atoi(operacoes.operacoes[k].parametros[2]);
-            clear(image, dimX, dimY, r, g, b);
-        } else if(strcmp("line", operacoes.operacoes[k].operacao) == 0) {
-           
-            /* Código para inserir linha deve estar aqui*/
-            line( 2,6,5,5);
 
-            swapPixel(10, 10, 255, 255, 255);
+            clear(image, dimX, dimY, r, g, b);
+        } else if(strcmp("line", operacoes.operacoes[k].operacao) == 0){
+            int x = atoi(operacoes.operacoes[k].parametros[0]);
+            int y = atoi(operacoes.operacoes[k].parametros[1]);
+
+            /* Bloco de teste para escrever no arquivo */
+            /*image[x][y].r = cor.r;
+            image[x][y].g = cor.g;
+            image[x][y].b = cor.b;
+
+            image[x][y+1].r = cor.r;
+            image[x][y+1].g = cor.g;
+            image[x][y+1].b = cor.b;
+
+            image[x][y+2].r = cor.r;
+            image[x][y+2].g = cor.g;
+            image[x][y+2].b = cor.b;*/
+        } else if(strcmp("color", operacoes.operacoes[k].operacao) == 0){
+            int r = atoi(operacoes.operacoes[k].parametros[0]);
+            int g = atoi(operacoes.operacoes[k].parametros[1]);
+            int b = atoi(operacoes.operacoes[k].parametros[2]);
+
+            defineCor(&cor, r, g, b);
         }
     }
 
