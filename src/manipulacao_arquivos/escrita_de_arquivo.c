@@ -17,12 +17,17 @@ typedef struct{
  * parametro b: Valor b do formato RGB
  * retorno: Devolve por referência o pixel pintado com a nova cor
  */
+void pintaPixel(Pixel **imagem, int x, int y, int r, int g, int b){
+    imagem[x][y].r = r;
+    imagem[x][y].g = g;
+    imagem[x][y].b = b;
+}
+
 void defineCor(Pixel *cor, int r, int g, int b){
     (*cor).r = r;
     (*cor).g = g;
     (*cor).b = b;
 }
-
 /*
  * clear: Preenche toda a imagem com uma cor especificada em rgb
  * parametro **image: Matriz de pixels que representa a imagem a ser gerada
@@ -108,13 +113,56 @@ void line_b(int x1, int y1, int x2, int y2) {
     setPoint(x, y, 0,0,0);
 }
 
+/* Generalized Bresenham's Algorithm */
+void bres_general(Pixel **imagem, int x1, int y1, int x2, int y2){
+  
+  int dx, dy, x, y, d, s1, s2, swap=0, temp, i;
+
+  dx = abs(x2 - x1);
+  dy = abs(y2 - y1);
+  s1 = sign(x2-x1);
+  s2 = sign(y2-y1);
+
+  /* Check if dx or dy has a greater range */
+  /* if dy has a greater range than dx swap dx and dy */
+  if(dy > dx){
+    temp = dx; 
+    dx = dy; 
+    dy = temp; 
+    swap = 1;
+  }
+
+  /* Set the initial decision parameter and the initial point */
+  d = 2 * dy - dx;
+  x = x1;
+  y = y1;
+
+  for(i = 1; i <= dx; i++) {
+
+    pintaPixel(imagem, x, y, 0, 0, 0);
+    
+    while(d >= 0) {
+      if(swap){
+        x = x + s1;
+      } else {
+        y = y + s2;
+        d = d - 2* dx;
+      }
+    }
+    if(swap) y = y + s2;
+    else x = x + s1;
+    d = d + 2 * dy;
+  }
+  pintaPixel(imagem, x, y, 0, 0, 0);
+}
+
 /*Operacoes operacoes*/
 void desenhaImagem(char nome[], Operacoes operacoes){
     int dimX, dimY;
     int i, j, k, w;
     Pixel **image;
     Pixel cor;
-    defineCor(&cor, 0, 0, 0);
+    /*defineCor(&cor, 0, 0, 0, 0, 0);*/
 
 
     /* 
@@ -144,21 +192,15 @@ void desenhaImagem(char nome[], Operacoes operacoes){
 
             clear(image, dimX, dimY, r, g, b);
         } else if(strcmp("line", operacoes.operacoes[k].operacao) == 0){
-            int x = atoi(operacoes.operacoes[k].parametros[0]);
-            int y = atoi(operacoes.operacoes[k].parametros[1]);
+            int inicioX = atoi(operacoes.operacoes[k].parametros[0]);
+            int fimX = atoi(operacoes.operacoes[k].parametros[1]);
+            int inicioY = atoi(operacoes.operacoes[k].parametros[2]);
+            int fimY = atoi(operacoes.operacoes[k].parametros[3]);
 
-            /* Bloco de teste para escrever no arquivo */
-            /*image[x][y].r = cor.r;
-            image[x][y].g = cor.g;
-            image[x][y].b = cor.b;
+            bres_general(image, inicioX, inicioY, fimX, fimY);
 
-            image[x][y+1].r = cor.r;
-            image[x][y+1].g = cor.g;
-            image[x][y+1].b = cor.b;
-
-            image[x][y+2].r = cor.r;
-            image[x][y+2].g = cor.g;
-            image[x][y+2].b = cor.b;*/
+            pintaPixel(image, inicioX, inicioY, cor.r, cor.g, cor.b);
+            pintaPixel(image, fimX, fimY, cor.r, cor.g, cor.b);
         } else if(strcmp("color", operacoes.operacoes[k].operacao) == 0){
             int r = atoi(operacoes.operacoes[k].parametros[0]);
             int g = atoi(operacoes.operacoes[k].parametros[1]);
