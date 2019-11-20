@@ -134,6 +134,21 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             int b = atoi(operacoes.operacoes[k].parametros[2]);
 
             defineCor(&cor, r, g, b);
+        } else if(strcmp("polygon", operacoes.operacoes[k].operacao) == 0){
+            int qntdPontos = atoi(operacoes.operacoes[k].parametros[0]);
+
+            for(i = 1; i < qntdPontos * 2; i+=2){
+                /*Aqui eu irei pegar os pontos
+                pontox = atoi(operacoes.operacoes[k].parametros[i]);
+                pontoy = atoi(operacoes.operacoes[k].parametros[i + 1]);
+
+                mas preciso pensar só em como eu irei armazenar o primeiro ponto e o último
+                para poder ligar o polígono e não deixá-lo aberto. Outro problema é que para
+                desenhar uma reta eu preciso sempre de dois pontos. Posso criar uma matrix de
+                Matriz[n][2] onde n vai ser a quantidade de pontos e ir adicionando lá. Depois
+                eu percorro de novo e faço um for indo de 0 até n-1 para desenhar.
+                */
+            }
         }
     }
 
