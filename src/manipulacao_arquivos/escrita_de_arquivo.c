@@ -51,117 +51,31 @@ void clear(Pixel **image, int largura, int altura, int r, int b, int g){
     }
 }
 
-void swapPixel(int dimX, int dimY, int caracter1, int caracter2, int caracter3) {
-    int i, j; 
-    int imagem[i][j];
-    for ( ;i < dimX; ++i){
-        for (; j < dimY; ++j){
-
-          if (imagem[i][j]==caracter1){ 
-            printf("\u2588 ");
-          } else {
-            printf("%c ", imagem[i][j]);
-          }
-        }
-        printf("\n");
-      }
-}
-
-int setPoint(int x, int y, int caracter1,int caracter2, int caracter3) {
-    /*imagem[x][y].r = caracter1;
-    imagem[x][y].g = caracter2;
-    imagem[x][y].b = caracter3;*/
-}
-
-int sign(int num) {
-    int result;
-    if(num < 0) {
-        result = -1;
-    }
-    if(num == 0) {
-        result = 0;
-    }
-    if(num > 0) {
-        result = 1;
-    }
-    return(result);
-}
-
-void line_b(int x1, int y1, int x2, int y2) {
-    int dx, dy, incrementoE, incrementeNE, d, x, y;
-
-    x = x1;
-    y = y1;
-    dx = x2 - x1;
-    dy = y2 - y1;
-    d = 2*dy - dx;
-    incrementoE = 2*dy;
-    incrementeNE = 2*(dy-dx);
-
-    setPoint(x, y, 0,0,0);
-    while(x < x1) {
-        if(d<=0) {
-            d = d + incrementoE;
-            x = x+1;
-        }
-        else {
-            d = d + incrementeNE;
-            x = x +1;
-            y = y + 1;
-        }
-    }
-    setPoint(x, y, 0,0,0);
-}
-
-/* Generalized Bresenham's Algorithm */
-void bres_general(Pixel **imagem, int x1, int y1, int x2, int y2){
-  
-  int dx, dy, x, y, d, s1, s2, swap=0, temp, i;
-
-  dx = abs(x2 - x1);
-  dy = abs(y2 - y1);
-  s1 = sign(x2-x1);
-  s2 = sign(y2-y1);
-
-  /* Check if dx or dy has a greater range */
-  /* if dy has a greater range than dx swap dx and dy */
-  if(dy > dx){
-    temp = dx; 
-    dx = dy; 
-    dy = temp; 
-    swap = 1;
-  }
-
-  /* Set the initial decision parameter and the initial point */
-  d = 2 * dy - dx;
-  x = x1;
-  y = y1;
-
-  for(i = 1; i <= dx; i++) {
-
-    pintaPixel(imagem, x, y, 0, 0, 0);
+void line(Pixel **matrix, Pixel cor, int x0, int y0, int x1, int y1) {
+    int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
+    int err = (dx>dy ? dx : -dy)/2, e2;
     
-    while(d >= 0) {
-      if(swap){
-        x = x + s1;
-      } else {
-        y = y + s2;
-        d = d - 2* dx;
-      }
+    for(;;){
+        pintaPixel(matrix, x0, y0, cor.r, cor.g, cor.b);
+
+        if (x0==x1 && y0==y1) break;
+        e2 = err;
+        if (e2 >-dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
     }
-    if(swap) y = y + s2;
-    else x = x + s1;
-    d = d + 2 * dy;
-  }
-  pintaPixel(imagem, x, y, 0, 0, 0);
 }
 
 /*Operacoes operacoes*/
 void desenhaImagem(char nome[], Operacoes operacoes){
+    FILE *arquivo;
     int dimX, dimY;
-    int i, j, k, w;
+    int i, j, k;
     Pixel **image;
     Pixel cor;
+    cor.r = 0;
+    cor.g = 0;
+    cor.b = 0;
     /*defineCor(&cor, 0, 0, 0, 0, 0);*/
 
 
@@ -192,15 +106,28 @@ void desenhaImagem(char nome[], Operacoes operacoes){
 
             clear(image, dimX, dimY, r, g, b);
         } else if(strcmp("line", operacoes.operacoes[k].operacao) == 0){
-            int inicioX = atoi(operacoes.operacoes[k].parametros[0]);
-            int fimX = atoi(operacoes.operacoes[k].parametros[1]);
-            int inicioY = atoi(operacoes.operacoes[k].parametros[2]);
-            int fimY = atoi(operacoes.operacoes[k].parametros[3]);
+            int x0 = atoi(operacoes.operacoes[k].parametros[0]);
+            int y0 = atoi(operacoes.operacoes[k].parametros[1]);
+            int x1 = atoi(operacoes.operacoes[k].parametros[2]);
+            int y1 = atoi(operacoes.operacoes[k].parametros[3]);
 
-            bres_general(image, inicioX, inicioY, fimX, fimY);
+            if(x0 == dimX){
+                x0--;
+            }
 
-            pintaPixel(image, inicioX, inicioY, cor.r, cor.g, cor.b);
-            pintaPixel(image, fimX, fimY, cor.r, cor.g, cor.b);
+            if(x1 == dimX){
+                x1--;
+            }
+
+            if(y0 == dimY){
+                y0--;
+            }
+
+            if(y1 == dimY){
+                y1--;
+            }
+
+            line(image, cor, x0, y0, x1, y1);
         } else if(strcmp("color", operacoes.operacoes[k].operacao) == 0){
             int r = atoi(operacoes.operacoes[k].parametros[0]);
             int g = atoi(operacoes.operacoes[k].parametros[1]);
@@ -211,14 +138,11 @@ void desenhaImagem(char nome[], Operacoes operacoes){
     }
 
     /* Escrita de arquivo */
-    FILE *arquivo;
     arquivo = fopen(nome, "wb");
 
     fprintf(arquivo, "P3 \n");
-    fprintf(arquivo, "%d %d \n", dimX, dimY);
-    fprintf(arquivo, "255 \n");
-    
-    for (i = 0; i < dimX; i++){
+    fprintf(arquivo, "%d %d \n", dimX, dimY); fprintf(arquivo, "255 \n"); 
+       for (i = 0; i < dimX; i++){
         for (j = 0; j < dimY; j++){
             fprintf(arquivo, "%i ", image[i][j].r);
             fprintf(arquivo, "%i ", image[i][j].g);

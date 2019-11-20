@@ -9,7 +9,6 @@
  * retorno: Operacoes
  */
 Operacoes criaOperacoes() {
-    int i;
     Operacoes operacoes;
     operacoes.qntdOperacoes = 0;
 
