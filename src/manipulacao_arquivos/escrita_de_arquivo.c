@@ -135,20 +135,37 @@ void desenhaImagem(char nome[], Operacoes operacoes){
 
             defineCor(&cor, r, g, b);
         } else if(strcmp("polygon", operacoes.operacoes[k].operacao) == 0){
+            /* Pega a quantidade de pontos que o polígono vai ter e cria
+               uma matriz para guardar os pontos */
             int qntdPontos = atoi(operacoes.operacoes[k].parametros[0]);
+            int pontos[qntdPontos][2];
+            int ultimoPonto[1][2];
+            int contador = 0;
 
             for(i = 1; i < qntdPontos * 2; i+=2){
-                /*Aqui eu irei pegar os pontos
-                pontox = atoi(operacoes.operacoes[k].parametros[i]);
-                pontoy = atoi(operacoes.operacoes[k].parametros[i + 1]);
+                int pontox = atoi(operacoes.operacoes[k].parametros[i]);
+                int pontoy = atoi(operacoes.operacoes[k].parametros[i + 1]);
 
-                mas preciso pensar só em como eu irei armazenar o primeiro ponto e o último
-                para poder ligar o polígono e não deixá-lo aberto. Outro problema é que para
-                desenhar uma reta eu preciso sempre de dois pontos. Posso criar uma matrix de
-                Matriz[n][2] onde n vai ser a quantidade de pontos e ir adicionando lá. Depois
-                eu percorro de novo e faço um for indo de 0 até n-1 para desenhar.
-                */
+                if(pontox == dimX){
+                    pontox--;
+                }
+
+                if(pontoy == dimY){
+                    pontoy--;
+                }
+
+                pontos[contador][0] = pontox;
+                pontos[contador][1] = pontoy;
+                contador++;
             }
+
+            for(i = 0; i < qntdPontos - 1; i++){
+                line(image, cor, pontos[i][0], pontos[i][1], pontos[i+1][0], pontos[i+1][1]);
+                ultimoPonto[0][0] = pontos[i+1][0];
+                ultimoPonto[0][1] = pontos[i+1][1];
+            }
+
+            line(image, cor, pontos[0][0], pontos[0][1], ultimoPonto[0][0], ultimoPonto[0][1]);
         }
     }
 
