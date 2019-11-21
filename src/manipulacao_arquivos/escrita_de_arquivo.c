@@ -174,11 +174,11 @@ void desenhaImagem(char nome[], Operacoes operacoes){
 
     fprintf(arquivo, "P3 \n");
     fprintf(arquivo, "%d %d \n", dimX, dimY); fprintf(arquivo, "255 \n"); 
-       for (i = 0; i < dimX; i++){
-        for (j = 0; j < dimY; j++){
-            fprintf(arquivo, "%i ", image[i][j].r);
-            fprintf(arquivo, "%i ", image[i][j].g);
-            fprintf(arquivo, "%i \n", image[i][j].b);
+       for (i = 0; i < dimY; i++){
+        for (j = 0; j < dimX; j++){
+            fprintf(arquivo, "%i ", image[j][i].r);
+            fprintf(arquivo, "%i ", image[j][i].g);
+            fprintf(arquivo, "%i \n", image[j][i].b);
         }
     }
     
