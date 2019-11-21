@@ -10,7 +10,7 @@ int main(){
 
   leituraDeArquivo("teste.txt", &operacoes);
 
-  desenhaImagem("arquivo.ppm", operacoes);
+  desenhaImagem(operacoes);
 
   for(i = 0; i < operacoes.qntdOperacoes; i++){
     for(j = 0; j < operacoes.operacoes[i].qntdParametros; j++){

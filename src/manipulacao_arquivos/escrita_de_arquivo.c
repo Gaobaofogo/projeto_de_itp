@@ -2,81 +2,47 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../operacoes/operacoes.h"
+#include "../imagem/imagem.h"
 
-typedef struct{
-    int r;
-    int g;
-    int b;
-} Pixel;
 
-/*
- * defineCor: Pinta um pixel
- * parametro *pixel: Ponteiro para um pixel
- * parametro r: Valor r do formato RGB
- * parametro g: Valor g do formato RGB
- * parametro b: Valor b do formato RGB
- * retorno: Devolve por referência o pixel pintado com a nova cor
- */
-void pintaPixel(Pixel **imagem, int x, int y, int r, int g, int b){
-    imagem[x][y].r = r;
-    imagem[x][y].g = g;
-    imagem[x][y].b = b;
-}
-
-void defineCor(Pixel *cor, int r, int g, int b){
-    (*cor).r = r;
-    (*cor).g = g;
-    (*cor).b = b;
-}
-/*
- * clear: Preenche toda a imagem com uma cor especificada em rgb
- * parametro **image: Matriz de pixels que representa a imagem a ser gerada
- * parametro largura: largura da imagem
- * parametro altura: altura da imagem
- * parametro r: Valor r do formato RGB
- * parametro g: Valor g do formato RGB
- * parametro b: Valor b do formato RGB
- * retorno: Devolve por referência a matriz de pixels pintada com a nova cor especificada
- */
-void clear(Pixel **image, int largura, int altura, int r, int b, int g){
+void salvarImagem(Imagem *imagem, char **parametros){
     int i, j;
+    FILE *arquivo;
 
-    /* Seta todas os pixels com a cor rgb especificada */
-    for(i = 0; i < largura; i++){
-        for(j = 0; j < altura; j++){
-            image[i][j].r = r;
-            image[i][j].g = g;
-            image[i][j].b = b;
+    /* Escrita de arquivo */
+    arquivo = fopen(parametros[0], "w");
+
+    fprintf(arquivo, "P3 \n");
+    fprintf(arquivo, "%d %d \n", (*imagem).dimX, (*imagem).dimY);
+    fprintf(arquivo, "255 \n");
+
+    for (i = 0; i < (*imagem).dimY; i++){
+        for (j = 0; j < (*imagem).dimX; j++){
+            fprintf(arquivo, "%i ", (*imagem).pixels[j][i].r);
+            fprintf(arquivo, "%i ", (*imagem).pixels[j][i].g);
+            fprintf(arquivo, "%i\n", (*imagem).pixels[j][i].b);
         }
     }
+
+    fclose(arquivo);
 }
 
-void line(Pixel **matrix, Pixel cor, int x0, int y0, int x1, int y1) {
-    int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
-    int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
-    int err = (dx>dy ? dx : -dy)/2, e2;
-    
-    for(;;){
-        pintaPixel(matrix, x0, y0, cor.r, cor.g, cor.b);
+void liberarEspacoPixels(Imagem *imagem){
+    int i;
 
-        if (x0==x1 && y0==y1) break;
-        e2 = err;
-        if (e2 >-dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
+    for(i = 0; i < (*imagem).dimX; i++){
+        free((*imagem).pixels[i]);
     }
+
+    free((*imagem).pixels);
 }
 
 /*Operacoes operacoes*/
-void desenhaImagem(char nome[], Operacoes operacoes){
-    FILE *arquivo;
-    int dimX, dimY;
-    int i, j, k;
-    Pixel **image;
+void desenhaImagem(Operacoes operacoes){
+    int k;
+    Imagem imagem;
     Pixel cor;
-    cor.r = 0;
-    cor.g = 0;
-    cor.b = 0;
-    /*defineCor(&cor, 0, 0, 0, 0, 0);*/
+    defineCor(&cor, 0, 0, 0);
 
 
     /* 
@@ -90,103 +56,58 @@ void desenhaImagem(char nome[], Operacoes operacoes){
             Atribui as dimensões da imagem para dimX e dimY e aloca o espaço necessário para a imagem
             como uma matriz de pixels
             */
-            dimX = atoi(operacoes.operacoes[k].parametros[0]);
-            dimY = atoi(operacoes.operacoes[k].parametros[1]);
 
-            image = (Pixel **) malloc(dimX * sizeof(Pixel *));
+            imagem = criaImagem(operacoes.operacoes[k].parametros);
 
-            for(j = 0; j < dimX; j++){
-                image[j] = (Pixel *) malloc(dimY * sizeof(Pixel));
-            }
         } else if(strcmp("clear", operacoes.operacoes[k].operacao) == 0){
             /* Pega os valores rgb e preenche toda a imagem com a cor desejada */
             int r = atoi(operacoes.operacoes[k].parametros[0]);
             int g = atoi(operacoes.operacoes[k].parametros[1]);
             int b = atoi(operacoes.operacoes[k].parametros[2]);
 
-            clear(image, dimX, dimY, r, g, b);
+            clear(&imagem, r, g, b);
         } else if(strcmp("line", operacoes.operacoes[k].operacao) == 0){
             int x0 = atoi(operacoes.operacoes[k].parametros[0]);
             int y0 = atoi(operacoes.operacoes[k].parametros[1]);
             int x1 = atoi(operacoes.operacoes[k].parametros[2]);
             int y1 = atoi(operacoes.operacoes[k].parametros[3]);
 
-            if(x0 == dimX){
+            if(x0 == imagem.dimX){
                 x0--;
             }
 
-            if(x1 == dimX){
+            if(x1 == imagem.dimX){
                 x1--;
             }
 
-            if(y0 == dimY){
+            if(y0 == imagem.dimY){
                 y0--;
             }
 
-            if(y1 == dimY){
+            if(y1 == imagem.dimY){
                 y1--;
             }
 
-            line(image, cor, x0, y0, x1, y1);
+            line(&imagem, cor, x0, y0, x1, y1);
+
         } else if(strcmp("color", operacoes.operacoes[k].operacao) == 0){
             int r = atoi(operacoes.operacoes[k].parametros[0]);
             int g = atoi(operacoes.operacoes[k].parametros[1]);
             int b = atoi(operacoes.operacoes[k].parametros[2]);
 
             defineCor(&cor, r, g, b);
+
         } else if(strcmp("polygon", operacoes.operacoes[k].operacao) == 0){
             /* Pega a quantidade de pontos que o polígono vai ter e cria
                uma matriz para guardar os pontos */
-            int qntdPontos = atoi(operacoes.operacoes[k].parametros[0]);
-            int pontos[qntdPontos][2];
-            int ultimoPonto[1][2];
-            int contador = 0;
+            desenhaPoligono(&imagem, operacoes.operacoes[k].parametros, cor);
 
-            for(i = 1; i < qntdPontos * 2; i+=2){
-                int pontox = atoi(operacoes.operacoes[k].parametros[i]);
-                int pontoy = atoi(operacoes.operacoes[k].parametros[i + 1]);
+        } else if(strcmp("save", operacoes.operacoes[k].operacao) == 0){
 
-                if(pontox == dimX){
-                    pontox--;
-                }
-
-                if(pontoy == dimY){
-                    pontoy--;
-                }
-
-                pontos[contador][0] = pontox;
-                pontos[contador][1] = pontoy;
-                contador++;
-            }
-
-            for(i = 0; i < qntdPontos - 1; i++){
-                line(image, cor, pontos[i][0], pontos[i][1], pontos[i+1][0], pontos[i+1][1]);
-                ultimoPonto[0][0] = pontos[i+1][0];
-                ultimoPonto[0][1] = pontos[i+1][1];
-            }
-
-            line(image, cor, pontos[0][0], pontos[0][1], ultimoPonto[0][0], ultimoPonto[0][1]);
+            salvarImagem(&imagem, operacoes.operacoes[k].parametros);
         }
     }
-
-    /* Escrita de arquivo */
-    arquivo = fopen(nome, "wb");
-
-    fprintf(arquivo, "P3 \n");
-    fprintf(arquivo, "%d %d \n", dimX, dimY); fprintf(arquivo, "255 \n"); 
-       for (i = 0; i < dimY; i++){
-        for (j = 0; j < dimX; j++){
-            fprintf(arquivo, "%i ", image[j][i].r);
-            fprintf(arquivo, "%i ", image[j][i].g);
-            fprintf(arquivo, "%i \n", image[j][i].b);
-        }
-    }
-    
-    fclose(arquivo);
 
     /* Liberação de memória dos pixels */
-    for(i = 0; i < dimX; i++){
-        free(image[i]);
-    }
-    free(image);
+    liberarEspacoPixels(&imagem);
 }

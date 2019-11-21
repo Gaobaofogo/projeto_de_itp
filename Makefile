@@ -15,8 +15,12 @@ remove_lixo:
 
 #### Funções auxiliares ####
 # Gera um executável do programa chamado 'prog'
-prog: src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o main.o
-	gcc -o prog src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o main.o -W -Wall -ansi -pedantic -std=c99
+prog: src/operacoes/operacoes.o src/imagem/imagem.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o main.o
+	gcc -o prog src/operacoes/operacoes.o src/manipulacao_arquivos/leitura_de_arquivo.o src/manipulacao_arquivos/escrita_de_arquivo.o src/imagem/imagem.o main.o -W -Wall -ansi -pedantic -std=c99
+
+# Gera o arquivo '.o' de imagem.c
+src/imagem/imagem.o: src/imagem/imagem.c
+	gcc src/imagem/imagem.c -o src/imagem/imagem.o -c -W -Wall -ansi -pedantic -std=c99
 
 # Gera o arquivo '.o' de operacoes.c
 src/operacoes/operacoes.o: src/operacoes/operacoes.c
