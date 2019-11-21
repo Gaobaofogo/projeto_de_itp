@@ -19,4 +19,6 @@ void defineCor(Pixel *cor, int r, int g, int b);
 void clear(Imagem *imagem, int r, int b, int g);
 void line(Imagem *imagem, Pixel cor, int x0, int y0, int x1, int y1);
 void desenhaPoligono(Imagem *imagem, char **parametros, Pixel cor);
+void salvarImagem(Imagem *imagem, char **parametros);
+void liberarEspacoPixels(Imagem *imagem);
 #endif

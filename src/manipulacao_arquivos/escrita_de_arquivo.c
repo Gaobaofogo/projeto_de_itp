@@ -5,38 +5,6 @@
 #include "../imagem/imagem.h"
 
 
-void salvarImagem(Imagem *imagem, char **parametros){
-    int i, j;
-    FILE *arquivo;
-
-    /* Escrita de arquivo */
-    arquivo = fopen(parametros[0], "w");
-
-    fprintf(arquivo, "P3 \n");
-    fprintf(arquivo, "%d %d \n", (*imagem).dimX, (*imagem).dimY);
-    fprintf(arquivo, "255 \n");
-
-    for (i = 0; i < (*imagem).dimY; i++){
-        for (j = 0; j < (*imagem).dimX; j++){
-            fprintf(arquivo, "%i ", (*imagem).pixels[j][i].r);
-            fprintf(arquivo, "%i ", (*imagem).pixels[j][i].g);
-            fprintf(arquivo, "%i\n", (*imagem).pixels[j][i].b);
-        }
-    }
-
-    fclose(arquivo);
-}
-
-void liberarEspacoPixels(Imagem *imagem){
-    int i;
-
-    for(i = 0; i < (*imagem).dimX; i++){
-        free((*imagem).pixels[i]);
-    }
-
-    free((*imagem).pixels);
-}
-
 /*Operacoes operacoes*/
 void desenhaImagem(Operacoes operacoes){
     int k;
