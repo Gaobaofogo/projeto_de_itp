@@ -34,6 +34,13 @@ void pintaPixel(Imagem *imagem, int x, int y, int r, int g, int b){
     (*imagem).pixels[x][y].b = b;
 }
 
+int comparaCor(Pixel pixel1, Pixel pixel2){
+    if(pixel1.r == pixel2.r && pixel1.g == pixel2.g && pixel1.b == pixel2.b)
+        return 1;
+
+    return 0;
+}
+
 void defineCor(Pixel *cor, int r, int g, int b){
     (*cor).r = r;
     (*cor).g = g;
@@ -129,6 +136,44 @@ void salvarImagem(Imagem *imagem, char **parametros){
     }
 
     fclose(arquivo);
+}
+
+void baldeDeTinta(Imagem *imagem, Pixel cor, int x, int y){
+    int altura = (*imagem).dimX;
+
+    if(altura == 0 || altura == (*imagem).dimX - 1){
+        return;
+    }
+
+    int largura = (*imagem).dimY;
+
+    if(largura == 0 || largura == (*imagem).dimY - 1){
+        return;
+    }
+
+    Pixel pixelAtual = (*imagem).pixels[x][y];
+
+    if(comparaCor(pixelAtual, cor)){
+        return;
+    }
+
+    pintaPixel(imagem, x, y, cor.r, cor.g, cor.b);
+
+    if(x > 0 && comparaCor((*imagem).pixels[x - 1][y], pixelAtual)){
+        baldeDeTinta(imagem, cor, x - 1, y);
+    }
+
+    if(y > 0 && comparaCor((*imagem).pixels[x][y - 1], pixelAtual)){
+        baldeDeTinta(imagem, cor, x, y - 1);
+    }
+
+    if(x < ((*imagem).dimX - 1) && comparaCor((*imagem).pixels[x + 1][y], pixelAtual)){
+        baldeDeTinta(imagem, cor, x + 1, y);
+    }
+
+    if(y < ((*imagem).dimY - 1) && comparaCor((*imagem).pixels[x][y + 1], pixelAtual)){
+        baldeDeTinta(imagem, cor, x, y + 1);
+    }
 }
 
 void liberarEspacoPixels(Imagem *imagem){

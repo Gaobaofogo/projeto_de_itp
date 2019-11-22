@@ -12,7 +12,6 @@ void desenhaImagem(Operacoes operacoes){
     Pixel cor;
     defineCor(&cor, 0, 0, 0);
 
-
     /* 
     Este bloco irá percorrer todas as operações lidas no arquivo e vai tomar
     a ação descrita na operação
@@ -73,6 +72,12 @@ void desenhaImagem(Operacoes operacoes){
         } else if(strcmp("save", operacoes.operacoes[k].operacao) == 0){
 
             salvarImagem(&imagem, operacoes.operacoes[k].parametros);
+
+        } else if(strcmp("fill", operacoes.operacoes[k].operacao) == 0){
+            int x = atoi(operacoes.operacoes[k].parametros[0]);
+            int y = atoi(operacoes.operacoes[k].parametros[1]);
+
+            baldeDeTinta(&imagem, cor, x, y);
         }
     }
 
