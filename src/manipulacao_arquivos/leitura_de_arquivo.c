@@ -10,11 +10,11 @@
  */
 Operacoes leituraDeOperacoes(FILE *arquivo){
     Operacoes operacoes = criaOperacoes();
-    char textoArquivo[50];
+    char textoArquivo[200];
     char *valores;
     int contadorOperacao = 0, primeiraOperacao = 1;
 
-    while(fgets(textoArquivo, 50, arquivo) != NULL){
+    while(fgets(textoArquivo, 200, arquivo) != NULL){
         valores = strtok(textoArquivo, " ");
 
         do{

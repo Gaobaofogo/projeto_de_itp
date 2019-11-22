@@ -83,9 +83,9 @@ void desenhaPoligono(Imagem *imagem, char **parametros, Pixel cor){
     int ultimoPonto[1][2];
     int contador = 0;
 
-    for(i = 1; i < qntdPontos * 2; i+=2){
-        int pontox = atoi(parametros[i]);
-        int pontoy = atoi(parametros[i + 1]);
+    for(i = 2; i < qntdPontos * 2 + 1; i+=2){
+        int pontox = atoi(parametros[i - 1]);
+        int pontoy = atoi(parametros[i]);
 
         if(pontox == (*imagem).dimX){
             pontox--;
