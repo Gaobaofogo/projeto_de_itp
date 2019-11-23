@@ -21,5 +21,5 @@ void line(Imagem *imagem, Pixel cor, int x0, int y0, int x1, int y1);
 void desenhaPoligono(Imagem *imagem, char **parametros, Pixel cor);
 void salvarImagem(Imagem *imagem, char **parametros);
 void liberarEspacoPixels(Imagem *imagem);
-void baldeDeTinta(Imagem *imagem, Pixel cor, int x, int y);
+void baldeDeTinta(Imagem *imagem, Pixel cor, int inicio_x, int inicio_y);
 #endif

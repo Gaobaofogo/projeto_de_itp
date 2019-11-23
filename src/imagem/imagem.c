@@ -1,4 +1,5 @@
 #include "imagem.h"
+#include "../fila/fila.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -138,7 +139,7 @@ void salvarImagem(Imagem *imagem, char **parametros){
     fclose(arquivo);
 }
 
-void baldeDeTinta(Imagem *imagem, Pixel cor, int x, int y){
+void baldeDeTinta(Imagem *imagem, Pixel cor, int inicio_x, int inicio_y){
     int altura = (*imagem).dimX;
 
     if(altura == 0 || altura == (*imagem).dimX - 1){
@@ -151,28 +152,40 @@ void baldeDeTinta(Imagem *imagem, Pixel cor, int x, int y){
         return;
     }
 
-    Pixel pixelAtual = (*imagem).pixels[x][y];
+    Pixel pixelInicial = (*imagem).pixels[inicio_x][inicio_y];
 
-    if(comparaCor(pixelAtual, cor)){
+    if(comparaCor(pixelInicial, cor)){
         return;
     }
 
-    pintaPixel(imagem, x, y, cor.r, cor.g, cor.b);
+    Fila fila = criaFila();
+    adicionaElemento(&fila, inicio_x, inicio_y);
 
-    if(x > 0 && comparaCor((*imagem).pixels[x - 1][y], pixelAtual)){
-        baldeDeTinta(imagem, cor, x - 1, y);
-    }
+    while(!estahVazio(&fila)){
+        Noh *noh = retiraElemento(&fila);
 
-    if(y > 0 && comparaCor((*imagem).pixels[x][y - 1], pixelAtual)){
-        baldeDeTinta(imagem, cor, x, y - 1);
-    }
+        int x = noh->dados.posicaoCartesiana[0];
+        int y = noh->dados.posicaoCartesiana[1];
 
-    if(x < ((*imagem).dimX - 1) && comparaCor((*imagem).pixels[x + 1][y], pixelAtual)){
-        baldeDeTinta(imagem, cor, x + 1, y);
-    }
+        if(x < ((*imagem).dimX - 1) && comparaCor(pixelInicial, (*imagem).pixels[x + 1][y])){
+            adicionaElemento(&fila, x + 1, y);
+            pintaPixel(imagem, x + 1, y, cor.r, cor.g, cor.b);
+        }
 
-    if(y < ((*imagem).dimY - 1) && comparaCor((*imagem).pixels[x][y + 1], pixelAtual)){
-        baldeDeTinta(imagem, cor, x, y + 1);
+        if(x > 0 && comparaCor(pixelInicial, (*imagem).pixels[x - 1][y])){
+            adicionaElemento(&fila, x - 1, y);
+            pintaPixel(imagem, x - 1, y, cor.r, cor.g, cor.b);
+        }
+
+        if(y < ((*imagem).dimY - 1) && comparaCor(pixelInicial, (*imagem).pixels[x][y + 1])){
+            adicionaElemento(&fila, x, y + 1);
+            pintaPixel(imagem, x, y + 1, cor.r, cor.g, cor.b);
+        }
+
+        if(y > 0 && comparaCor(pixelInicial, (*imagem).pixels[x][y - 1])){
+            adicionaElemento(&fila, x, y - 1);
+            pintaPixel(imagem, x, y - 1, cor.r, cor.g, cor.b);
+        }
     }
 }
 
