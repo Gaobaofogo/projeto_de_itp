@@ -189,6 +189,40 @@ void baldeDeTinta(Imagem *imagem, Pixel cor, int inicio_x, int inicio_y){
     }
 }
 
+void desenhaCirculo(Imagem *imagem, int x0, int y0, int raio, Pixel cor){
+    int f = 1 - raio;
+    int ddF_x = 0;
+    int ddF_y = -2 * raio;
+    int x = 0;
+    int y = raio;
+ 
+    pintaPixel(imagem, x0, y0 + raio, cor.r, cor.g, cor.b);
+    pintaPixel(imagem, x0, y0 - raio, cor.r, cor.g, cor.b);
+    pintaPixel(imagem, x0 + raio, y0, cor.r, cor.g, cor.b);
+    pintaPixel(imagem, x0 - raio, y0, cor.r, cor.g, cor.b);
+ 
+    while(x < y) 
+    {
+        if(f >= 0) 
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x + 1;    
+        pintaPixel(imagem, x0 + x, y0 + y, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 - x, y0 + y, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 + x, y0 - y, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 - x, y0 - y, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 + y, y0 + x, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 - y, y0 + x, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 + y, y0 - x, cor.r, cor.g, cor.b);
+        pintaPixel(imagem, x0 - y, y0 - x, cor.r, cor.g, cor.b);
+    }
+}
+
 void liberarEspacoPixels(Imagem *imagem){
     int i;
 

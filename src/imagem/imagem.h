@@ -20,6 +20,7 @@ void clear(Imagem *imagem, int r, int b, int g);
 void line(Imagem *imagem, Pixel cor, int x0, int y0, int x1, int y1);
 void desenhaPoligono(Imagem *imagem, char **parametros, Pixel cor);
 void salvarImagem(Imagem *imagem, char **parametros);
-void liberarEspacoPixels(Imagem *imagem);
 void baldeDeTinta(Imagem *imagem, Pixel cor, int inicio_x, int inicio_y);
+void desenhaCirculo(Imagem *imagem, int x0, int y0, int raio, Pixel cor);
+void liberarEspacoPixels(Imagem *imagem);
 #endif

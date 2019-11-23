@@ -77,7 +77,21 @@ void desenhaImagem(Operacoes operacoes){
             int x = atoi(operacoes.operacoes[k].parametros[0]);
             int y = atoi(operacoes.operacoes[k].parametros[1]);
 
+            if(x == imagem.dimX){
+                x--;
+            }
+
+            if(y ==  imagem.dimY){
+                y--;
+            }
+
             baldeDeTinta(&imagem, cor, x, y);
+        } else if(strcmp("circle", operacoes.operacoes[k].operacao) == 0){
+            int x = atoi(operacoes.operacoes[k].parametros[0]);
+            int y = atoi(operacoes.operacoes[k].parametros[1]);
+            int raio = atoi(operacoes.operacoes[k].parametros[2]);
+
+            desenhaCirculo(&imagem, x, y, raio, cor);
         }
     }
 

@@ -1,9 +1,8 @@
-image 600 400
-clear 0 0 0
-color 100 170 200
-polygon 3 0 400 300 200 600 400
-color 180 30 50
-fill 300 300
-color 255 0 0
-fill 0 0
+image 400 400
+clear 255 255 255
+color 0 0 0
+circle 200 200 20
+circle 200 200 10
+circle 200 200 50
+circle 200 200 100
 save test.ppm
